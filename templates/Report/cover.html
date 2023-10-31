@@ -1,0 +1,77 @@
+{% load static %}
+<html>
+<head>
+  
+<style>
+    .reporttitlepage{
+      
+      height: 1320px;
+      margin: 50px;
+    }
+   .reporttitle {
+       
+        font-size: 70px;
+        text-align: center;
+        margin-top: 165px;
+        font-family: Calibri;
+        font-weight: 600;
+        font-size:90px;
+        padding: 30px;
+      }
+    
+   
+    .imagelogo {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      width: 50%;
+    }
+ 
+    body {
+        /* The image used */
+        /* background-image: url("https://i.ibb.co/xLBbrkz/BG.jpg"); */
+        background: white;
+      
+        /* Full height */
+        height: 100%;
+      
+        /* Center and scale the image nicely */
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+</style>
+
+</head>
+
+<body>
+
+
+<header>
+  <header>
+    
+    <!-- Rest of the header content -->
+</header>
+<div class="reporttitlepage">
+  <img src="{{project.companyname.img.path}}" alt="Logo" style="width: 100px; height: 100px;">
+    <!-- HTML Content -->
+    <br><br><br>
+   <p class="reporttitle"><h2 style="color: Red; text-align: center;">{{project.companyname.name}}</h2>
+    <br><br><br><br><br><br><br><br><br>
+
+    <p style="text-align:center;"><script>document.write(new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' }).replace(/\d{1,2}(st|nd|rd|th)/, '$& '))</script></p>
+
+
+    <br><br><br><br><br><br><br><br><br>
+    <h2 style="text-align: center ;">{{project.projecttype}} Report Of {{project.name}}</h2> </p>
+   <!-- <img src="{{project.companyname.img.path}}" class="imagelogo"> -->
+    <div onload="substitutePdfVariables()">
+      
+   
+</div> 
+<header>
+ 
+
+</body>
+
+</html>

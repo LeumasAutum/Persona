@@ -1,0 +1,249 @@
+{% load static %}
+{% include 'Header.html' %}
+<div class="card">
+    {% block content %}
+    <head>
+        <!-- Add viewport meta tag for responsiveness -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+    body {
+    background-color: #ccc;
+    }
+    * {
+        box-sizing: border-box;
+        border-radius: 10px;
+    }
+
+    /* Create two columns with specified percentages */
+    .column {
+        float: left;
+        width: 100%;
+    }
+
+    @media screen and (min-width: 600px) {
+        .column:nth-child(1) {
+            width: 60%;
+        }
+        .column:nth-child(2) {
+            width: 40%;
+        }
+
+        /* Add padding to the left and right of the main content */
+        .container {
+            padding: 0 10px;
+        }
+    }
+
+    /* Add padding and border radius to the rows */
+    .row {
+        border-bottom: 3px solid blue;
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    /* Allow long vulnerability names to wrap to the next line */
+    ul {
+        white-space: normal;
+    }
+
+    /* Set chart container size for responsiveness */
+    .chart-container {
+        width: 100%;
+        max-width: 100%;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+    }
+
+    /* Remove unnecessary cards and lines */
+    .card {
+        background: none;
+        border: none;
+    }
+
+    .card-header {
+        background: none;
+        border: none;
+    }
+</style>
+
+    </head>
+
+    {% csrf_token %}
+    <div class="container">
+<h4 class="card-header d-flex justify-content-between align-items-center text-white" style="background-color:#bbb; border-radius: 10px">
+            <div>
+                Projects
+            </div>
+            <a role="button" class="btn btn-primary" href="/Dashboard">All Projects</a>
+        </h4>
+        {% for project_vulnerability in project_vulnerabilities %}
+        <div class="row">
+            <div class="column" style="background-color:#aaa;">
+                <h2>{{ project_vulnerability.name }}</h2>
+                <ul style="height: 300px; overflow-y: scroll;">
+                    {% for vulnerability in project_vulnerability.vulnerabilities %}
+                    {% if vulnerability.status == "Vulnerable" %}
+                    <li>
+                        {% if vulnerability.vulnerabilityseverity == "Critical" %}
+                        <button type="button" class="btn text-white" style="background-color:#FF491C;">{{ vulnerability.vulnerabilityname }} (Critical)</button>
+                        {% elif vulnerability.vulnerabilityseverity == "High" %}
+                        <button type="button" class="btn text-white" style="background-color:#F66E09;">{{ vulnerability.vulnerabilityname }} (High)</button>
+                        {% elif vulnerability.vulnerabilityseverity == "Medium" %}
+                        <button type="button" class="btn text-white" style="background-color:#FBBC02;">{{ vulnerability.vulnerabilityname }} (Medium)</button>
+                        {% elif vulnerability.vulnerabilityseverity == "Low" %}
+                        <button type="button" class="btn text-white" style="background-color:#20B803;">{{ vulnerability.vulnerabilityname }} (Low)</button>
+                        {% elif vulnerability.vulnerabilityseverity == "Informational" %}
+                        <button type="button" class="btn text-white" style="background-color:#3399FF;">{{ vulnerability.vulnerabilityname }} (Informational)</button>
+                        {% endif %}
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="column" style="background-color:#bbb;">
+                <div class="pieChart" style="background-color: white;">
+                    <div class="chart-container">
+                        <canvas id="chart-{{ project_vulnerability.name }}"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+                       
+                                
+    
+    
+    
+
+                            
+                         
+            <!-- footer -->
+            <!-- ============================================================== -->
+            <div class="footer bootstrap-dark">
+                <div class="container-fluid bootstrap-dark">
+                    <div class="row">
+                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+                            Copyright © 2023 SPDA. All rights reserved. Dashboard by <a href="https://colorlib.com/wp/">Colorlib</a>.
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            <!-- end footer -->
+            <!-- ============================================================== -->
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="{% static "vendor/jquery/jquery-3.3.1.min.js" %}"></script>
+    <script src="{% static "vendor/bootstrap/js/bootstrap.bundle.js" %}"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+        $('table').DataTable({
+            
+            
+            
+            dom: '<"toolbar">frtip',
+            "paging": true,
+          "lengthChange": false,
+          "searching": true,
+          "ordering": true,
+          "info": true,
+          "autoWidth": true,
+          "responsive": true,
+          "bDestroy": true,
+          paging: false,
+          searching: false
+        });
+        
+    });
+
+    
+        <script>
+            $('button.btnDelete').on('click', function(e) {
+                e.preventDefault();
+                var id = $(this).closest('tr').data('id');
+                $('#myModal').data('id', id).modal('show');
+            });
+        
+            $('#btnDelteYes').click(function() {
+                var id = $('#myModal').data('id');
+                var xhr = new XMLHttpRequest()
+
+                xhr.open('GET', '/company/delete?companyid='+ id, true);
+            
+                xhr.onload = function() { //Call a function when the state changes.
+                
+                    if (xhr.status == 200) {
+                    
+                        $('[data-id=' + id + ']').remove();
+                        $('#myModal').modal('hide');
+
+                        }
+                    }
+                    xhr.send();
+            }); 
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+     
+        <script>
+            {% for project_vulnerability in project_vulnerabilities %}
+            // Filter vulnerabilities with status "open" and calculate their counts
+            var openVulnerabilities = {
+                'Critical': 0,
+                'High': 0,
+                'Medium': 0,
+                'Low': 0,
+                'Informational': 0
+            };
+        
+            {% for vulnerability in project_vulnerability.vulnerabilities %}
+            {% if vulnerability.status == "Vulnerable" %}
+            openVulnerabilities['{{ vulnerability.vulnerabilityseverity }}']++;
+            {% endif %}
+            {% endfor %}
+        
+            var ctx = document.getElementById('chart-{{ project_vulnerability.name }}').getContext('2d');
+            new Chart(ctx, {
+                type: 'pie', // Use pie chart type
+                data: {
+                    labels: ['Critical', 'High', 'Medium', 'Low', 'Informational'],
+                    datasets: [{
+                        label: 'Open Vulnerability Counts',
+                        data: [
+                            openVulnerabilities['Critical'],
+                            openVulnerabilities['High'],
+                            openVulnerabilities['Medium'],
+                            openVulnerabilities['Low'],
+                            openVulnerabilities['Informational']
+                        ],
+                        backgroundColor: [
+                            '#FF491C', '#F66E09', '#FBBC02', '#20B803', '#3399FF'
+                        ],
+                    }],
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+            {% endfor %}
+        </script>
+        
+      
+        {% endblock %}     
+
+</body>
+ 
+</html>
